@@ -95,4 +95,3 @@ There's more to building and working with JDBC and datastores in general than is
 * Consuming REST APIs
 * Testing REST APIs
 
-
