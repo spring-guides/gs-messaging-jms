@@ -10,30 +10,13 @@ import javax.jms.*;
 public class Main {
 
     public static void main(String args[]) throws Throwable {
+        // setup share variables
         String mailboxDestination = "mailbox-destination";
         CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory(new ActiveMQConnectionFactory("tcp://localhost:61616"));
-        setupPollingJmsTemplate(mailboxDestination, cachingConnectionFactory);
-    }
+        cachingConnectionFactory.afterPropertiesSet();
 
-    public static void setupPollingJmsTemplate(String mailboxDestination, ConnectionFactory cachingConnectionFactory) throws Throwable {
-
-        JmsTemplate jmsTemplate = new JmsTemplate(cachingConnectionFactory);
-        jmsTemplate.send(mailboxDestination, new MessageCreator() {
-            @Override
-            public Message createMessage(Session session) throws JMSException {
-                return session.createTextMessage("ping!");
-            }
-        });
-
-        TextMessage textMessage = (TextMessage) jmsTemplate.receive(mailboxDestination);
-        String message = textMessage.getText();
-        System.out.println("message : " + message);
-    }
-
-    public static void setupMessageListenerContainer(String mailboxDestination, ConnectionFactory cachingConnectionFactory) throws Throwable {
-
-        SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer();
-        simpleMessageListenerContainer.setMessageListener(new MessageListener() {
+        // receive
+        MessageListener messageListener = new MessageListener() {
             @Override
             public void onMessage(Message message) {
                 try {
@@ -43,24 +26,26 @@ public class Main {
                     throw new RuntimeException(e);
                 }
             }
-        });
-        simpleMessageListenerContainer.setConcurrentConsumers(20);
+        };
+
+        SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer();
+        simpleMessageListenerContainer.setMessageListener(messageListener);
+        simpleMessageListenerContainer.setConcurrentConsumers(5);
         simpleMessageListenerContainer.setConnectionFactory(cachingConnectionFactory);
         simpleMessageListenerContainer.setDestinationName(mailboxDestination);
         simpleMessageListenerContainer.afterPropertiesSet();
         simpleMessageListenerContainer.start();
 
+        // send
+        MessageCreator messageCreator = new
+                MessageCreator() {
+                    @Override
+                    public Message createMessage(Session session) throws JMSException {
+                        return session.createTextMessage("ping!");
+                    }
+                };
         JmsTemplate jmsTemplate = new JmsTemplate(cachingConnectionFactory);
-        for (int i = 0; i < 20; i++) {
-            final int index = i;
-            jmsTemplate.send(mailboxDestination, new MessageCreator() {
-                @Override
-                public Message createMessage(Session session) throws JMSException {
-                    return session.createTextMessage("ping! #" + (index + 1));
-                }
-            });
-        }
+        jmsTemplate.send(mailboxDestination, messageCreator);
 
     }
-
 }
