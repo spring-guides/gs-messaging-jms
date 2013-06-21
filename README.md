@@ -59,7 +59,7 @@ In a project directory of your choosing, create the following subdirectory struc
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.springframework</groupId>
-	<artifactId>gs-consuming-jms-initial</artifactId>
+	<artifactId>gs-messaging-jms-initial</artifactId>
 	<version>0.1.0</version>
 
 	<parent>
