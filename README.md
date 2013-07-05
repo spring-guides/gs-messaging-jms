@@ -1,3 +1,4 @@
+
 Getting Started: Messaging with JMS
 ===================================
 
@@ -10,6 +11,7 @@ What you'll need
 ----------------
 
  - About 15 minutes
+ - ActiveMQ JMS broker (instructions below)
  - A favorite text editor or IDE
  - [JDK 6][jdk] or later
  - [Maven 3.0][mvn] or later
@@ -27,11 +29,12 @@ To **start from scratch**, move on to [Set up the project](#scratch).
 To **skip the basics**, do the following:
 
  - [Download][zip] and unzip the source repository for this guide, or clone it using [git](/understanding/git):
-`git clone https://github.com/springframework-meta/{@project-name}.git`
- - cd into `{@project-name}/initial`
- - Jump ahead to [Create a resource representation class](#initial).
+`git clone https://github.com/springframework-meta/gs-messaging-jms.git`
+ - cd into `gs-messaging-jms/initial`
+ - Jump ahead to [Creating a message receiver](#initial).
 
-**When you're finished**, you can check your results against the code in `{@project-name}/complete`.
+**When you're finished**, you can check your results against the code in `gs-messaging-jms/complete`.
+[zip]: https://github.com/springframework-meta/gs-messaging-jms/archive/master.zip
 
 
 <a name="scratch"></a>
@@ -59,7 +62,7 @@ In a project directory of your choosing, create the following subdirectory struc
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.springframework</groupId>
-	<artifactId>gs-messaging-jms-initial</artifactId>
+	<artifactId>gs-messaging-jms-complete</artifactId>
 	<version>0.1.0</version>
 
 	<parent>
@@ -83,6 +86,19 @@ In a project directory of your choosing, create the following subdirectory struc
 			<version>5.8.0</version>
 		</dependency>
 	</dependencies>
+
+    <properties>
+        <start-class>hello.Application</start-class>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 	<repositories>
 		<repository>
@@ -292,7 +308,7 @@ Run the service
 ---------------
 Run your service with `java -jar` at the command line:
 
-    java -jar target/gs-consuming-jms-complete-0.1.0.jar
+    java -jar target/gs-messaging-jms-complete-0.1.0.jar
 
 When it runs, you should see a couple messages:
 
@@ -304,5 +320,3 @@ Received <ping!>
 Summary
 -------
 Congrats! You've just developed a publisher and consumer of JMS-based messages.
-
-[zip]: https://github.com/springframework-meta/gs-consuming-jms/archive/master.zip
