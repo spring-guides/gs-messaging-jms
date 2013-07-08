@@ -182,7 +182,7 @@ public class Receiver {
 }
 ```
 
-This is also known as a **message driven POJO**. As you can see in the code above, there is not need to implement any particular interface or for the method to have any particular name.
+This is also known as a **message driven POJO**. As you can see in the code above, there is no need to implement any particular interface or for the method to have any particular name.
 
 Send and receive JMS messages with Spring
 ----------------------------------------------
@@ -267,7 +267,7 @@ The `SimpleMessageListenerContainer` class is an asynchronous message receiver. 
 
 Spring provides a convenient template class called `JmsTemplate`. `JmsTemplate` makes it very simple to send messages to a JMS message queue. In the `main` runner method, after starting things up, you create a `MessageCreator` and use it from `jmsTemplate` to send a message.
 
-> **Note:** Spring's `JmsTemplate` can receive messages directly through it's `receive` method, but it only works synchronously, meaning it will block. That's why Spring recommends that you use Spring's `SimpleMessageListenerContainer` with a cache-based connection factory so you can consume messages asynchronously and with maximum connection efficiency.
+> **Note:** Spring's `JmsTemplate` can receive messages directly through its `receive` method, but it only works synchronously, meaning it will block. That's why Spring recommends that you use Spring's `SimpleMessageListenerContainer` with a cache-based connection factory, so you can consume messages asynchronously and with maximum connection efficiency.
 
 
 Make the application executable
