@@ -308,10 +308,12 @@ Now run the following to produce a single executable JAR file containing all nec
 
 
 Run the service
----------------
+-------------------
 Run your service with `java -jar` at the command line:
 
-    java -jar target/gs-messaging-jms-complete-0.1.0.jar
+    java -jar target/gs-messaging-jms-0.1.0.jar
+
+
 
 When it runs, you should see these messages:
 

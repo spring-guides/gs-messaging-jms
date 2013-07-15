@@ -105,11 +105,7 @@ You can bundle the app as a runnable jar file, thanks to the maven-shade-plugin 
 ## <@build_an_executable_jar/>
 
 
-Run the service
----------------
-Run your service with `java -jar` at the command line:
-
-    java -jar target/${project_id}-complete-0.1.0.jar
+<@run_the_application module="service"/>
 
 When it runs, you should see these messages:
 
