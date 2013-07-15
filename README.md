@@ -274,8 +274,6 @@ Make the application executable
 -------------------------------
 You can bundle the app as a runnable jar file, thanks to the maven-shade-plugin as well as Spring Bootstrap's support for embedded Tomcat.
 
-###Build an executable JAR
-
 Now that your `Application` class is ready, you simply instruct the build system to create a single, executable jar containing everything. This makes it easy to ship, version, and deploy the service as an application throughout the development lifecycle, across different environments, and so forth.
 
 Add the following configuration to your existing Maven POM:
