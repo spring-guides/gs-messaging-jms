@@ -28,7 +28,7 @@ Set up the project
 
 ### Create a Maven POM
 
-    <@snippet path="pom.xml" prefix="complete"/>
+    <@snippet path="pom.xml" prefix="initial"/>
 
 <@bootstrap_starter_pom_disclaimer/>
 
