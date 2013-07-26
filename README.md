@@ -1,7 +1,4 @@
 
-Getting Started: Messaging with JMS
-===================================
-
 What you'll build
 -----------------
 

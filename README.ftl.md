@@ -1,8 +1,5 @@
 <#assign project_id="gs-messaging-jms">
 
-Getting Started: Messaging with JMS
-===================================
-
 What you'll build
 -----------------
 
