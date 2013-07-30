@@ -63,15 +63,15 @@ In a project directory of your choosing, create the following subdirectory struc
 	<version>0.1.0</version>
 
 	<parent>
-		<groupId>org.springframework.zero</groupId>
-		<artifactId>spring-starter-parent</artifactId>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-up-parent</artifactId>
 		<version>0.5.0.BUILD-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.zero</groupId>
-			<artifactId>spring-starter-web</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-up-web</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -106,7 +106,7 @@ In a project directory of your choosing, create the following subdirectory struc
 </project>
 ```
 
-TODO: mention that we're using Spring Bootstrap's [_starter POMs_](../gs-bootstrap-starter) here.
+TODO: mention that we're using Spring Boot's [_starter POMs_](../gs-bootstrap-starter) here.
 
 Note to experienced Maven users who are unaccustomed to using an external parent project: you can take it out later, it's just there to reduce the amount of code you have to write to get started.
 
@@ -256,7 +256,7 @@ Spring provides a convenient template class called `JmsTemplate`. `JmsTemplate` 
 
 Make the application executable
 -------------------------------
-You can bundle the app as a runnable jar file, thanks to the maven-shade-plugin as well as Spring Bootstrap's support for embedded Tomcat.
+You can bundle the app as a runnable jar file, thanks to the maven-shade-plugin as well as Spring Boot's support for embedded Tomcat.
 
 Now that your `Application` class is ready, you simply instruct the build system to create a single, executable jar containing everything. This makes it easy to ship, version, and deploy the service as an application throughout the development lifecycle, across different environments, and so forth.
 
@@ -271,8 +271,8 @@ Add the following configuration to your existing Maven POM:
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.zero</groupId>
-                <artifactId>spring-package-maven-plugin</artifactId>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
@@ -280,15 +280,20 @@ Add the following configuration to your existing Maven POM:
 
 The `start-class` property tells Maven to create a `META-INF/MANIFEST.MF` file with a `Main-Class: hello.Application` entry. This entry enables you to run the jar with `java -jar`.
 
-The [Spring Package maven plugin][spring-package-maven-plugin] collects all the jars on the classpath and builds a single "über-jar", which makes it more convenient to execute and transport your service.
+The [Spring Boot maven plugin][spring-boot-maven-plugin] collects all the jars on the classpath and builds a single "über-jar", which makes it more convenient to execute and transport your service.
 
-Now run the following to produce a single executable JAR file containing all necessary dependency classes and resources:
+Now run the following command to produce a single executable JAR file containing all necessary dependency classes and resources:
 
 ```sh
 $ mvn package
 ```
 
-[spring-package-maven-plugin]: https://github.com/SpringSource/spring-zero/tree/master/spring-package-maven-plugin
+To run the package, run this:
+```sh
+$ mvn spring-boot:run
+```
+
+[spring-boot-maven-plugin]: https://github.com/SpringSource/spring-boot/tree/master/spring-boot-maven-plugin
 
 > **Note:** The procedure above will create a runnable JAR. You can also opt to [build a classic WAR file](/guides/gs/convert-jar-to-war/content) instead.
 

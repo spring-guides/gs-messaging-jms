@@ -97,7 +97,7 @@ Spring provides a convenient template class called `JmsTemplate`. `JmsTemplate` 
 
 Make the application executable
 -------------------------------
-You can bundle the app as a runnable jar file, thanks to the maven-shade-plugin as well as Spring Bootstrap's support for embedded Tomcat.
+You can bundle the app as a runnable jar file, thanks to the maven-shade-plugin as well as Spring Boot's support for embedded Tomcat.
 
 ## <@build_an_executable_jar/>
 
