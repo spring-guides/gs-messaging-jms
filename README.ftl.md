@@ -102,7 +102,7 @@ You can bundle the app as a runnable jar file, thanks to the maven-shade-plugin 
 ## <@build_an_executable_jar/>
 
 
-<@run_the_application module="service"/>
+<@run_the_application_with_maven module="service"/>
 
 When it runs, you should see these messages:
 
