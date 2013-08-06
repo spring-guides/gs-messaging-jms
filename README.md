@@ -87,7 +87,7 @@ In a project directory of your choosing, create the following subdirectory struc
 	<repositories>
 		<repository>
 			<id>spring-snapshots</id>
-			<url>http://repo.springsource.org/snapshot</url>
+			<url>http://repo.springsource.org/libs-snapshot</url>
 			<snapshots><enabled>true</enabled></snapshots>
 		</repository>
 		<repository>
@@ -99,7 +99,7 @@ In a project directory of your choosing, create the following subdirectory struc
 	<pluginRepositories>
 		<pluginRepository>
 			<id>spring-snapshots</id>
-			<url>http://repo.springsource.org/snapshot</url>
+			<url>http://repo.springsource.org/libs-snapshot</url>
 			<snapshots><enabled>true</enabled></snapshots>
 		</pluginRepository>
 	</pluginRepositories>
