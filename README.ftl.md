@@ -1,9 +1,10 @@
 <#assign project_id="gs-messaging-jms">
+This guide walks you through the process of publishing and subscribing to messages using a JMS broker.
 
 What you'll build
 -----------------
 
-This guide walks you through the process of publishing and subscribing to messages using a JMS broker.
+You'll build an application that uses Spring's `JmsTemplate` to post a single message and subscribes for it with a POJO using `MessageListenerAdapter`.
 
 What you'll need
 ----------------
