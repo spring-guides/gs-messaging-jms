@@ -17,41 +17,41 @@ import org.springframework.jms.listener.adapter.MessageListenerAdapter;
 
 @Configuration
 public class Application {
-	
+    
     static String mailboxDestination = "mailbox-destination";
-	
-	@Bean
-	ConnectionFactory connectionFactory() {
-		return new CachingConnectionFactory(
-				new ActiveMQConnectionFactory("tcp://localhost:61616"));
-	}
-	
-	@Bean
-	MessageListenerAdapter receiver() {
-		return new MessageListenerAdapter(new Receiver()) {{
-			setDefaultListenerMethod("receiveMessage");
-		}};
-	}
-	
-	@Bean
-	SimpleMessageListenerContainer container(final MessageListenerAdapter messageListener,
-			final ConnectionFactory connectionFactory) {
-		return new SimpleMessageListenerContainer() {{
-	        setMessageListener(messageListener);
-	        setConnectionFactory(connectionFactory);
-	        setDestinationName(mailboxDestination);
-		}};
-	}
-	
-	@Bean
-	JmsTemplate jmsTemplate(ConnectionFactory connectionFactory) {
-		return new JmsTemplate(connectionFactory);
-	}
-	
+    
+    @Bean
+    ConnectionFactory connectionFactory() {
+        return new CachingConnectionFactory(
+                new ActiveMQConnectionFactory("tcp://localhost:61616"));
+    }
+    
+    @Bean
+    MessageListenerAdapter receiver() {
+        return new MessageListenerAdapter(new Receiver()) {{
+            setDefaultListenerMethod("receiveMessage");
+        }};
+    }
+    
+    @Bean
+    SimpleMessageListenerContainer container(final MessageListenerAdapter messageListener,
+            final ConnectionFactory connectionFactory) {
+        return new SimpleMessageListenerContainer() {{
+            setMessageListener(messageListener);
+            setConnectionFactory(connectionFactory);
+            setDestinationName(mailboxDestination);
+        }};
+    }
+    
+    @Bean
+    JmsTemplate jmsTemplate(ConnectionFactory connectionFactory) {
+        return new JmsTemplate(connectionFactory);
+    }
+    
     public static void main(String args[]) throws Throwable {
-    	AnnotationConfigApplicationContext context = 
-    			new AnnotationConfigApplicationContext(Application.class);
-    	
+        AnnotationConfigApplicationContext context = 
+                new AnnotationConfigApplicationContext(Application.class);
+        
         MessageCreator messageCreator = new MessageCreator() {
                     @Override
                     public Message createMessage(Session session) throws JMSException {

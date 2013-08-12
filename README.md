@@ -56,34 +56,34 @@ In a project directory of your choosing, create the following subdirectory struc
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.springframework</groupId>
-	<artifactId>gs-messaging-jms</artifactId>
-	<version>0.1.0</version>
+    <groupId>org.springframework</groupId>
+    <artifactId>gs-messaging-jms</artifactId>
+    <version>0.1.0</version>
 
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>0.5.0.BUILD-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>0.5.0.BUILD-SNAPSHOT</version>
+    </parent>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jms</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-client</artifactId>
-			<version>5.8.0</version>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-client</artifactId>
+            <version>5.8.0</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -94,25 +94,25 @@ In a project directory of your choosing, create the following subdirectory struc
         </plugins>
     </build>
 
-	<repositories>
-		<repository>
-			<id>spring-snapshots</id>
-			<url>http://repo.springsource.org/libs-snapshot</url>
-			<snapshots><enabled>true</enabled></snapshots>
-		</repository>
-		<repository>
-			<id>spring-releases</id>
-			<url>http://repo.springsource.org/release</url>
-			<snapshots><enabled>true</enabled></snapshots>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>spring-snapshots</id>
-			<url>http://repo.springsource.org/libs-snapshot</url>
-			<snapshots><enabled>true</enabled></snapshots>
-		</pluginRepository>
-	</pluginRepositories>
+    <repositories>
+        <repository>
+            <id>spring-snapshots</id>
+            <url>http://repo.springsource.org/libs-snapshot</url>
+            <snapshots><enabled>true</enabled></snapshots>
+        </repository>
+        <repository>
+            <id>spring-releases</id>
+            <url>http://repo.springsource.org/release</url>
+            <snapshots><enabled>true</enabled></snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-snapshots</id>
+            <url>http://repo.springsource.org/libs-snapshot</url>
+            <snapshots><enabled>true</enabled></snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
 ```
 
@@ -203,41 +203,41 @@ import org.springframework.jms.listener.adapter.MessageListenerAdapter;
 
 @Configuration
 public class Application {
-	
+    
     static String mailboxDestination = "mailbox-destination";
-	
-	@Bean
-	ConnectionFactory connectionFactory() {
-		return new CachingConnectionFactory(
-				new ActiveMQConnectionFactory("tcp://localhost:61616"));
-	}
-	
-	@Bean
-	MessageListenerAdapter receiver() {
-		return new MessageListenerAdapter(new Receiver()) {{
-			setDefaultListenerMethod("receiveMessage");
-		}};
-	}
-	
-	@Bean
-	SimpleMessageListenerContainer container(final MessageListenerAdapter messageListener,
-			final ConnectionFactory connectionFactory) {
-		return new SimpleMessageListenerContainer() {{
-	        setMessageListener(messageListener);
-	        setConnectionFactory(connectionFactory);
-	        setDestinationName(mailboxDestination);
-		}};
-	}
-	
-	@Bean
-	JmsTemplate jmsTemplate(ConnectionFactory connectionFactory) {
-		return new JmsTemplate(connectionFactory);
-	}
-	
+    
+    @Bean
+    ConnectionFactory connectionFactory() {
+        return new CachingConnectionFactory(
+                new ActiveMQConnectionFactory("tcp://localhost:61616"));
+    }
+    
+    @Bean
+    MessageListenerAdapter receiver() {
+        return new MessageListenerAdapter(new Receiver()) {{
+            setDefaultListenerMethod("receiveMessage");
+        }};
+    }
+    
+    @Bean
+    SimpleMessageListenerContainer container(final MessageListenerAdapter messageListener,
+            final ConnectionFactory connectionFactory) {
+        return new SimpleMessageListenerContainer() {{
+            setMessageListener(messageListener);
+            setConnectionFactory(connectionFactory);
+            setDestinationName(mailboxDestination);
+        }};
+    }
+    
+    @Bean
+    JmsTemplate jmsTemplate(ConnectionFactory connectionFactory) {
+        return new JmsTemplate(connectionFactory);
+    }
+    
     public static void main(String args[]) throws Throwable {
-    	AnnotationConfigApplicationContext context = 
-    			new AnnotationConfigApplicationContext(Application.class);
-    	
+        AnnotationConfigApplicationContext context = 
+                new AnnotationConfigApplicationContext(Application.class);
+        
         MessageCreator messageCreator = new MessageCreator() {
                     @Override
                     public Message createMessage(Session session) throws JMSException {
@@ -298,7 +298,7 @@ Now run the following command to produce a single executable JAR file containing
 $ mvn package
 ```
 
-[spring-boot-maven-plugin]: https://github.com/SpringSource/spring-boot/tree/master/spring-boot-maven-plugin
+[spring-boot-maven-plugin]: https://github.com/SpringSource/spring-boot/tree/master/spring-boot-tools/spring-boot-maven-plugin
 
 > **Note:** The procedure above will create a runnable JAR. You can also opt to [build a classic WAR file](/guides/gs/convert-jar-to-war/) instead.
 
