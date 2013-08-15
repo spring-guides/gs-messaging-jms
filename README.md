@@ -26,13 +26,14 @@ To **start from scratch**, move on to [Set up the project](#scratch).
 
 To **skip the basics**, do the following:
 
- - [Download][zip] and unzip the source repository for this guide, or clone it using [git](/understanding/git):
+ - [Download][zip] and unzip the source repository for this guide, or clone it using [git][u-git]:
 `git clone https://github.com/springframework-meta/gs-messaging-jms.git`
  - cd into `gs-messaging-jms/initial`.
  - Jump ahead to [Install and run ActiveMQ broker](#initial).
 
 **When you're finished**, you can check your results against the code in `gs-messaging-jms/complete`.
 [zip]: https://github.com/springframework-meta/gs-messaging-jms/archive/master.zip
+[u-git]: /understanding/Git
 
 
 <a name="scratch"></a>
