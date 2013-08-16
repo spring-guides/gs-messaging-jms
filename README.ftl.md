@@ -24,9 +24,9 @@ Set up the project
 
 <@create_directory_structure_hello/>
 
-### Create a Maven POM
+### Create a Gradle build file
 
-    <@snippet path="pom.xml" prefix="initial"/>
+    <@snippet path="build.gradle" prefix="initial"/>
 
 <@bootstrap_starter_pom_disclaimer/>
 
@@ -100,12 +100,12 @@ Make the application executable
 -------------------------------
 You can bundle the app as a runnable jar file, thanks to the maven-shade-plugin as well as Spring Boot's support for embedded Tomcat.
 
-## <@build_an_executable_jar/>
+## <@build_an_executable_jar_with_gradle/>
 
 
-<@run_the_application_with_maven module="service"/>
+<@run_the_application_with_gradle module="service"/>
 
-When it runs, you should see these messages:
+When it runs, buried amidst all the logging, you should see these messages:
 
 ```
 Sending a new mesage.
