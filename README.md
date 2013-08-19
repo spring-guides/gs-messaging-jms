@@ -3,7 +3,7 @@ This guide walks you through the process of publishing and subscribing to messag
 What you'll build
 -----------------
 
-You'll build an application that uses Spring's `JmsTemplate` to post a single message and subscribes for it with a POJO using `MessageListenerAdapter`.
+You'll build an application that uses Spring's `JmsTemplate` to post a single message and subscribes to it with a POJO using `MessageListenerAdapter`.
 
 What you'll need
 ----------------
