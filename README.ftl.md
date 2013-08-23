@@ -24,9 +24,8 @@ Set up the project
 
 <@create_directory_structure_hello/>
 
-### Create a Gradle build file
 
-    <@snippet path="build.gradle" prefix="initial"/>
+<@create_both_builds/>
 
 <@bootstrap_starter_pom_disclaimer/>
 
@@ -96,14 +95,12 @@ Spring provides a convenient template class called `JmsTemplate`. `JmsTemplate` 
 > **Note:** Spring's `JmsTemplate` can receive messages directly through its `receive` method, but it only works synchronously, meaning it will block. That's why Spring recommends that you use Spring's `SimpleMessageListenerContainer` with a cache-based connection factory, so you can consume messages asynchronously and with maximum connection efficiency.
 
 
-Make the application executable
--------------------------------
-You can bundle the app as a runnable jar file, thanks to the maven-shade-plugin as well as Spring Boot's support for embedded Tomcat.
+<@build_an_executable_jar_subhead/>
 
-## <@build_an_executable_jar_with_gradle/>
+<@build_an_executable_jar_with_both/>
 
 
-<@run_the_application_with_gradle module="service"/>
+<@run_the_application_with_both module="service"/>
 
 When it runs, buried amidst all the logging, you should see these messages:
 
