@@ -82,8 +82,8 @@ repositories {
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web:0.5.0.M5")
-    compile("org.springframework:spring-jms:4.0.0.M3")
+    compile("org.springframework.boot:spring-boot-starter:0.5.0.M6")
+    compile("org.springframework:spring-jms:4.0.0.RC1")
     compile("org.apache.activemq:activemq-client:5.8.0")
     testCompile("junit:junit:4.11")
 }
@@ -256,7 +256,7 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:0.5.0.M4")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:0.5.0.M6")
     }
 }
 ```
