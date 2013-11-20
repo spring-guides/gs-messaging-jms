@@ -24,14 +24,14 @@
         </dependency>
         <dependency>
             <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-client</artifactId>
-            <version>5.8.0</version>
+            <artifactId>activemq-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-jms_1.1_spec</artifactId>
+            <version>1.1</version>
         </dependency>
     </dependencies>
-
-    <properties>
-        <start-class>hello.Application</start-class>
-    </properties>
 
     <build>
         <plugins>

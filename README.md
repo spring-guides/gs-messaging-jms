@@ -9,7 +9,6 @@ What you'll need
 ----------------
 
  - About 15 minutes
- - ActiveMQ JMS broker (instructions below)
  - A favorite text editor or IDE
  - [JDK 6][jdk] or later
  - [Gradle 1.8+][gradle] or [Maven 3.0+][mvn]
@@ -32,7 +31,7 @@ To **skip the basics**, do the following:
  - [Download][zip] and unzip the source repository for this guide, or clone it using [Git][u-git]:
 `git clone https://github.com/spring-guides/gs-messaging-jms.git`
  - cd into `gs-messaging-jms/initial`.
- - Jump ahead to [Install and run ActiveMQ broker](#initial).
+ - Jump ahead to [Create a message receiver](#initial).
 
 **When you're finished**, you can check your results against the code in `gs-messaging-jms/complete`.
 [zip]: https://github.com/spring-guides/gs-messaging-jms/archive/master.zip
@@ -84,7 +83,8 @@ repositories {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter:0.5.0.M6")
     compile("org.springframework:spring-jms:4.0.0.RC1")
-    compile("org.apache.activemq:activemq-client:5.8.0")
+    compile("org.apache.activemq:activemq-core:5.4.0")
+    compile("org.apache.geronimo.specs:geronimo-jms_1.1_spec:1.1")
     testCompile("junit:junit:4.11")
 }
 
@@ -98,46 +98,6 @@ task wrapper(type: Wrapper) {
 > **Note:** This guide is using [Spring Boot](/guides/gs/spring-boot/).
 
 <a name="initial"></a>
-Install and run ActiveMQ broker
---------------------------------------
-To publish and subscribe to messages, you need to install a JMS broker. For this guide, you will use ActiveMQ. 
-
-> **Note:** ActiveMQ is an [AMQP](http://www.amqp.org/) broker that supports multiple protocols including [JMS](http://en.wikipedia.org/wiki/Java_Message_Service), the focus of this guide.
-
-Visit the [ActiveMQ download page](http://activemq.apache.org/activemq-580-release.html), get the proper version, then unpack it.
-
-Alternatively, if you use a Mac with [Homebrew](http://mxcl.github.io/homebrew/):
-
-    brew install activemq
-    
-Or on Ubuntu Linux:
-
-    sudo apt-get install activemq
-    
-If you download the bundle, unpack it and cd into the **bin** folder. If you use a package manager like **apt-get** or **brew**, it should already be on your path.
-
-Launch a simple broker:
-
-    activemq start
-    
-You see output something like this:
-
-```
-$ activemq start
-INFO: Using default configuration
-(you can configure options in one of these file: /etc/default/activemq /Users/gturnquist/.activemqrc)
-
-INFO: Invoke the following command to create a configuration file
-/usr/local/Cellar/activemq/5.8.0/libexec/bin/activemq setup [ /etc/default/activemq | /Users/gturnquist/.activemqrc ]
-
-INFO: Using java '/Library/Java/JavaVirtualMachines/jdk1.7.0_11.jdk/Contents/Home//bin/java'
-INFO: Starting - inspect logfiles specified in logging.properties and log4j.properties to get details
-INFO: pidfile created : '/usr/local/Cellar/activemq/5.8.0/libexec/data/activemq-retina.pid' (pid '7781')
-```
-> **Note:** To shut down the broker, run `activemq stop`.
-
-Now you're all set to run the rest of the code in this guide!
-
 Create a message receiver
 ---------------------------
 Spring provides the means to publish messages to any POJO.
@@ -146,9 +106,29 @@ Spring provides the means to publish messages to any POJO.
 ```java
 package hello;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.util.FileSystemUtils;
+
+import java.io.File;
+
 public class Receiver {
+
+    /**
+     * Get a copy of the application context
+     */
+    @Autowired
+    ConfigurableApplicationContext context;
+
+    /**
+     * When you receive a message, print it out, then shut down the application.
+     * Finally, clean up any ActiveMQ server stuff.
+     * @param message
+     */
     public void receiveMessage(String message) {
         System.out.println("Received <" + message + ">");
+        context.close();
+        FileSystemUtils.deleteRecursively(new File("activemq-data"));
     }
 }
 ```
@@ -161,6 +141,7 @@ Next, wire up a sender and a receiver.
 
 `src/main/java/hello/Application.java`
 ```java
+
 package hello;
 
 import javax.jms.ConnectionFactory;
@@ -168,75 +149,81 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 
-import org.apache.activemq.ActiveMQConnectionFactory;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.jms.listener.SimpleMessageListenerContainer;
 import org.springframework.jms.listener.adapter.MessageListenerAdapter;
+import org.springframework.util.FileSystemUtils;
+
+import java.io.File;
 
 @Configuration
+@EnableAutoConfiguration
 public class Application {
-    
-    static String mailboxDestination = "mailbox-destination";
-    
+
+	static String mailboxDestination = "mailbox-destination";
+
     @Bean
-    ConnectionFactory connectionFactory() {
-        return new CachingConnectionFactory(
-                new ActiveMQConnectionFactory("tcp://localhost:61616"));
+    Receiver receiver() {
+        return new Receiver();
     }
-    
-    @Bean
-    MessageListenerAdapter receiver() {
-        return new MessageListenerAdapter(new Receiver()) {{
-            setDefaultListenerMethod("receiveMessage");
-        }};
-    }
-    
-    @Bean
-    SimpleMessageListenerContainer container(final MessageListenerAdapter messageListener,
-            final ConnectionFactory connectionFactory) {
-        return new SimpleMessageListenerContainer() {{
-            setMessageListener(messageListener);
-            setConnectionFactory(connectionFactory);
-            setDestinationName(mailboxDestination);
-        }};
-    }
-    
-    @Bean
-    JmsTemplate jmsTemplate(ConnectionFactory connectionFactory) {
-        return new JmsTemplate(connectionFactory);
-    }
-    
-    public static void main(String args[]) throws Throwable {
-        AnnotationConfigApplicationContext context = 
-                new AnnotationConfigApplicationContext(Application.class);
-        
+
+	@Bean
+	MessageListenerAdapter adapter(Receiver receiver) {
+		return new MessageListenerAdapter(receiver) {
+			{
+				setDefaultListenerMethod("receiveMessage");
+			}
+		};
+	}
+
+	@Bean
+	SimpleMessageListenerContainer container(final MessageListenerAdapter messageListener,
+			final ConnectionFactory connectionFactory) {
+		return new SimpleMessageListenerContainer() {
+			{
+				setMessageListener(messageListener);
+				setConnectionFactory(connectionFactory);
+				setDestinationName(mailboxDestination);
+                setPubSubDomain(true);
+			}
+		};
+	}
+
+    public static void main(String[] args) {
+        // Clean out any ActiveMQ data from a previous run
+        FileSystemUtils.deleteRecursively(new File("activemq-data"));
+
+        // Launch the application
+        ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
+
+        // Send a message
         MessageCreator messageCreator = new MessageCreator() {
-                    @Override
-                    public Message createMessage(Session session) throws JMSException {
-                        return session.createTextMessage("ping!");
-                    }
-                };
+            @Override
+            public Message createMessage(Session session) throws JMSException {
+                return session.createTextMessage("ping!");
+            }
+        };
         JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
-        System.out.println("Sending a new mesage.");
+        System.out.println("Sending a new message.");
         jmsTemplate.send(mailboxDestination, messageCreator);
-        
-        context.close();
     }
+
 }
 ```
 
-The first key component is the `ConnectionFactory`interface. It consists of a `CachingConnectionFactory` wrapping an `ActiveMQConnectionFactory` pointed at `tcp://localhost:61616`, the default port of ActiveMQ.
+To wrap the `Receiver` you coded earlier, use `MessageListenerAdapter`. Then use the `setDefaultListenerMethod` to configure which method to invoke when a message comes in. Thus you avoid implementing any JMS or broker-specific interfaces.
 
-To wrap the `Receiver` you coded earlier, use `MessageListenerAdapter`. Then use the `setDefaultListenerMethod` to configure which method to invoke when a message comes in. Thus you avoid implementing any JMS- or broker-specific interfaces.
-
-The `SimpleMessageListenerContainer` class is an asynchronous message receiver. It uses the `MessageListenerAdapter` and the `ConnectionFactory` and is fired up when the application context starts. Another parameter is the queue name set in `mailboxDestination`.
+The `SimpleMessageListenerContainer` class is an asynchronous message receiver. It uses the `MessageListenerAdapter` and the `ConnectionFactory` and is fired up when the application context starts. Another parameter is the queue name set in `mailboxDestination`. It is also set up to receive messages ina 
 
 Spring provides a convenient template class called `JmsTemplate`. `JmsTemplate` makes it very simple to send messages to a JMS message queue. In the `main` runner method, after starting things up, you create a `MessageCreator` and use it from `jmsTemplate` to send a message.
+
+Two beans that you don't see defined are `JmsTemplate` and `ActiveMQConnectionFactory`. These are created automatically by Spring Boot. In this case, the ActiveMQ broker runs embedded.
 
 > **Note:** Spring's `JmsTemplate` can receive messages directly through its `receive` method, but it only works synchronously, meaning it will block. That's why Spring recommends that you use Spring's `SimpleMessageListenerContainer` with a cache-based connection factory, so you can consume messages asynchronously and with maximum connection efficiency.
 
