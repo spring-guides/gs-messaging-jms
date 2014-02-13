@@ -4,7 +4,7 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.0.0.RC1")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.0.0.RC2")
     }
 }
 
@@ -24,11 +24,11 @@ repositories {
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter:1.0.0.RC1")
-    compile("org.springframework:spring-jms:4.0.0.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter:1.0.0.RC2")
+    compile("org.springframework:spring-jms")
     compile("org.apache.activemq:activemq-core:5.4.0")
     compile("org.apache.geronimo.specs:geronimo-jms_1.1_spec:1.1")
-    testCompile("junit:junit:4.11")
+    testCompile("junit:junit")
 }
 
 task wrapper(type: Wrapper) {
