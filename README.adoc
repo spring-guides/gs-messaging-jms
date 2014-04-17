@@ -67,7 +67,7 @@ Spring provides a convenient template class called `JmsTemplate`. `JmsTemplate` 
 
 Two beans that you don't see defined are `JmsTemplate` and `ActiveMQConnectionFactory`. These are created automatically by Spring Boot. In this case, the ActiveMQ broker runs embedded.
 
-NOTE: Spring's `JmsTemplate` can receive messages directly through its `receive` method, but that only works synchronously, meaning it will block. That's why Spring recommends that you use the `SimpleMessageListenerContainer` with a cache-based connection factory, so you can consume messages asynchronously and with maximum connection efficiency.
+NOTE: Spring's `JmsTemplate` can receive messages directly through its `receive` method, but that only works synchronously, meaning it will block. That's why Spring recommends that you use a listener container such as `SimpleMessageListenerContainer` with a cache-based connection factory, so you can consume messages asynchronously and with maximum connection efficiency.
 
 
 include::https://raw.github.com/spring-guides/getting-started-macros/master/build_an_executable_jar_subhead.adoc[]
@@ -77,7 +77,7 @@ include::https://raw.github.com/spring-guides/getting-started-macros/master/buil
 When it runs, buried amidst all the logging, you should see these messages:
 
 ....
-Sending a new mesage.
+Sending a new message.
 Received <ping!>
 ....
 
