@@ -26,7 +26,7 @@ repositories {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter")
     compile("org.springframework:spring-jms")
-    compile("org.apache.activemq:activemq-core:5.4.0")
+    compile("org.apache.activemq:activemq-core")
     compile("org.apache.geronimo.specs:geronimo-jms_1.1_spec:1.1")
     testCompile("junit:junit")
 }
