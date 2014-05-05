@@ -15,19 +15,19 @@ You'll build an application that uses Spring's `JmsTemplate` to post a single me
 
 == What you'll need
 
-include::https://raw.github.com/spring-guides/getting-started-macros/master/prereq_editor_jdk_buildtools.adoc[]
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/prereq_editor_jdk_buildtools.adoc[]
 
-include::https://raw.github.com/spring-guides/getting-started-macros/master/how_to_complete_this_guide.adoc[]
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/how_to_complete_this_guide.adoc[]
 
 
 [[scratch]]
 == Set up the project
 
-include::https://raw.github.com/spring-guides/getting-started-macros/master/build_system_intro.adoc[]
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/build_system_intro.adoc[]
 
-include::https://raw.github.com/spring-guides/getting-started-macros/master/create_directory_structure_hello.adoc[]
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/create_directory_structure_hello.adoc[]
 
-include::https://raw.github.com/spring-guides/getting-started-macros/master/create_both_builds.adoc[]
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/create_both_builds.adoc[]
 
 `build.gradle`
 // AsciiDoc source formatting doesn't support groovy, so using java instead
@@ -36,7 +36,7 @@ include::https://raw.github.com/spring-guides/getting-started-macros/master/crea
 include::initial/build.gradle[]
 ----
 
-include::https://raw.github.com/spring-guides/getting-started-macros/master/spring-boot-gradle-plugin.adoc[]
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/spring-boot-gradle-plugin.adoc[]
 
 [[initial]]
 == Create a message receiver
@@ -70,9 +70,9 @@ Two beans that you don't see defined are `JmsTemplate` and `ActiveMQConnectionFa
 NOTE: Spring's `JmsTemplate` can receive messages directly through its `receive` method, but that only works synchronously, meaning it will block. That's why Spring recommends that you use a listener container such as `SimpleMessageListenerContainer` with a cache-based connection factory, so you can consume messages asynchronously and with maximum connection efficiency.
 
 
-include::https://raw.github.com/spring-guides/getting-started-macros/master/build_an_executable_jar_subhead.adoc[]
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/build_an_executable_jar_subhead.adoc[]
 
-include::https://raw.github.com/spring-guides/getting-started-macros/master/build_an_executable_jar_with_both.adoc[]
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/build_an_executable_jar_with_both.adoc[]
 
 When it runs, buried amidst all the logging, you should see these messages:
 
