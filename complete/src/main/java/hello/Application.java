@@ -33,7 +33,7 @@ public class Application {
     @Bean
     MessageListenerAdapter adapter(Receiver receiver) {
         MessageListenerAdapter messageListener
-                = new MessageListenerAdapter(receiver());
+                = new MessageListenerAdapter(receiver);
         messageListener.setDefaultListenerMethod("receiveMessage");
         return messageListener;
     }
