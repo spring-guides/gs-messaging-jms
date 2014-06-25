@@ -45,7 +45,6 @@ public class Application {
         container.setMessageListener(messageListener);
         container.setConnectionFactory(connectionFactory);
         container.setDestinationName(mailboxDestination);
-        container.setPubSubDomain(true);
         return container;
     }
 
