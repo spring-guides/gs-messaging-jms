@@ -7,6 +7,7 @@ projects: [spring-framework]
 :icons: font
 :source-highlighter: prettify
 :project_id: gs-messaging-jms
+
 This guide walks you through the process of publishing and subscribing to messages using a JMS broker.
 
 == What you'll build
@@ -61,11 +62,18 @@ include::complete/src/main/java/hello/Application.java[]
 
 To wrap the `Receiver` you coded earlier, use `MessageListenerAdapter`. Then use the `setDefaultListenerMethod` to configure which method to invoke when a message comes in. Thus you avoid implementing any JMS or broker-specific interfaces.
 
-The `SimpleMessageListenerContainer` class is an asynchronous message receiver. It uses the `MessageListenerAdapter` and the `ConnectionFactory` and is fired up when the application context starts. Another parameter is the queue name set in `mailboxDestination`. It is also set up to receive messages in a publish/subscribe fashion.
+The `SimpleMessageListenerContainer` class is an asynchronous message receiver. It uses the `MessageListenerAdapter` and the `ConnectionFactory` and is fired up when the application context starts. Another parameter is the queue name set in `mailboxDestination`.
 
 Spring provides a convenient template class called `JmsTemplate`. `JmsTemplate` makes it very simple to send messages to a JMS message queue. In the `main` runner method, after starting things up, you create a `MessageCreator` and use it from `jmsTemplate` to send a message.
 
 Two beans that you don't see defined are `JmsTemplate` and `ActiveMQConnectionFactory`. These are created automatically by Spring Boot. In this case, the ActiveMQ broker runs embedded.
+
+By default, Spring Boot creates a `JmsTemplate` configured to http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#jms-destinations
+[transmit to queues] by having **pubSubDomain** set to false. The `SimpleMessageListenerContainer is also configured the same.
+To override, set `spring.jms.isPubSubDomain=true` via Boot's property settings (either inside `application.propertes` or by environment variable). Then make sure the receiving container
+has the same setting.
+
+http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#jms-destinations
 
 NOTE: Spring's `JmsTemplate` can receive messages directly through its `receive` method, but that only works synchronously, meaning it will block. That's why Spring recommends that you use a listener container such as `SimpleMessageListenerContainer` with a cache-based connection factory, so you can consume messages asynchronously and with maximum connection efficiency.
 
