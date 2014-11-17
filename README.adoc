@@ -57,8 +57,7 @@ Spring provides a convenient template class called `JmsTemplate`. `JmsTemplate` 
 
 Two beans that you don't see defined are `JmsTemplate` and `ActiveMQConnectionFactory`. These are created automatically by Spring Boot. In this case, the ActiveMQ broker runs embedded.
 
-By default, Spring Boot creates a `JmsTemplate` configured to http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#jms-destinations
-[transmit to queues] by having **pubSubDomain** set to false. The `SimpleMessageListenerContainer is also configured the same.
+By default, Spring Boot creates a `JmsTemplate` configured to http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#jms-destinations[transmit to queues] by having **pubSubDomain** set to false. The `SimpleMessageListenerContainer` is also configured the same.
 To override, set `spring.jms.isPubSubDomain=true` via Boot's property settings (either inside `application.propertes` or by environment variable). Then make sure the receiving container
 has the same setting.
 
