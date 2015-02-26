@@ -11,38 +11,23 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.jms.annotation.EnableJms;
+import org.springframework.jms.config.JmsListenerContainerFactory;
+import org.springframework.jms.config.SimpleJmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
-import org.springframework.jms.listener.SimpleMessageListenerContainer;
-import org.springframework.jms.listener.adapter.MessageListenerAdapter;
 import org.springframework.util.FileSystemUtils;
 
 @SpringBootApplication
+@EnableJms
 public class Application {
 
-    static String mailboxDestination = "mailbox-destination";
 
-    @Bean
-    Receiver receiver() {
-        return new Receiver();
-    }
-
-    @Bean
-    MessageListenerAdapter adapter(Receiver receiver) {
-        MessageListenerAdapter messageListener
-                = new MessageListenerAdapter(receiver);
-        messageListener.setDefaultListenerMethod("receiveMessage");
-        return messageListener;
-    }
-
-    @Bean
-    SimpleMessageListenerContainer container(MessageListenerAdapter messageListener,
-                                             ConnectionFactory connectionFactory) {
-        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-        container.setMessageListener(messageListener);
-        container.setConnectionFactory(connectionFactory);
-        container.setDestinationName(mailboxDestination);
-        return container;
+    @Bean // Strictly speaking this bean is not necessary as boot creates a default
+    JmsListenerContainerFactory<?> myJmsContainerFactory(ConnectionFactory connectionFactory) {
+        SimpleJmsListenerContainerFactory factory = new SimpleJmsListenerContainerFactory();
+        factory.setConnectionFactory(connectionFactory);
+        return factory;
     }
 
     public static void main(String[] args) {
@@ -61,7 +46,7 @@ public class Application {
         };
         JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
         System.out.println("Sending a new message.");
-        jmsTemplate.send(mailboxDestination, messageCreator);
+        jmsTemplate.send("mailbox-destination", messageCreator);
     }
 
 }

@@ -12,7 +12,7 @@ This guide walks you through the process of publishing and subscribing to messag
 
 == What you'll build
 
-You'll build an application that uses Spring's `JmsTemplate` to post a single message and subscribes to it with a POJO using `MessageListenerAdapter`.
+You'll build an application that uses Spring's `JmsTemplate` to post a single message and subscribes to it with a `@JmsListener` annotated method of a managed bean.
 
 == What you'll need
 
@@ -38,7 +38,11 @@ Spring provides the means to publish messages to any POJO.
 include::complete/src/main/java/hello/Receiver.java[]
 ----
 
-This is also known as a **message driven POJO**. As you can see in the code above, there is no need to implement any particular interface or for the method to have any particular name.
+This is also known as a **message driven POJO**. As you can see in the code above, there is no need to implement any particular interface or for the method to have any particular name. Besides, the method may have a http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#jms-annotated-method-signature[very flexible signature]; in our simple example we will just extract the _payload_ of a `TextMessage`.
+
+The `JmsListener` annotation defines the name of the `Destination` that this method should listen to and the reference to the `JmsListenerContainerFactory` to use to create the underlying message listener container. Strictly speaking that last attribute is not necessary unless you need to customize the way the container is built as Spring Boot registers a default factory if necessary.
+
+The http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#jms-annotated[reference documentation] covers this in more detail.
 
 == Send and receive JMS messages with Spring
 Next, wire up a sender and a receiver.
@@ -53,24 +57,21 @@ include::complete/src/main/java/hello/Application.java[]
     
 - `@Configuration` tags the class as a source of bean definitions for the application context.
 - `@EnableAutoConfiguration` tells Spring Boot to start adding beans based on classpath settings, other beans, and various property settings.
-- Normally you would add `@EnableWebMvc` for a Spring MVC app, but Spring Boot adds it automatically when it sees **spring-webmvc** on the classpath. This flags the application as a web application and activates key behaviors such as setting up a `DispatcherServlet`.
-- `@ComponentScan` tells Spring to look for other components, configurations, and services in the the `hello` package, allowing it to find the `HelloController`.
+- `@ComponentScan` tells Spring to look for other components, configurations, and services in the the `hello` package, allowing it to find the `Receiver`.
 
-The `main()` method uses Spring Boot's `SpringApplication.run()` method to launch an application. Did you notice that there wasn't a single line of XML? No **web.xml** file either. This web application is 100% pure Java and you didn't have to deal with configuring any plumbing or infrastructure.
+The `main()` method uses Spring Boot's `SpringApplication.run()` method to launch an application. Did you notice that there wasn't a single line of XML? No **web.xml** file either. This application is 100% pure Java and you didn't have to deal with configuring any plumbing or infrastructure.
 
-To wrap the `Receiver` you coded earlier, use `MessageListenerAdapter`. Then use the `setDefaultListenerMethod` to configure which method to invoke when a message comes in. Thus you avoid implementing any JMS or broker-specific interfaces.
+`@EnableJms` triggers the discovery of methods annotated with `@JmsListener`, creating the message listener container under the covers.
 
-The `SimpleMessageListenerContainer` class is an asynchronous message receiver. It uses the `MessageListenerAdapter` and the `ConnectionFactory` and is fired up when the application context starts. Another parameter is the queue name set in `mailboxDestination`.
+For clarity, we have also defined a `myJmsContainerFactory` bean that is referenced in the `JmsListener` annotation of the receiver. This creates a `SimpleMessageListenerContainer`, an asynchronous message receiver that is fired up when the application context starts.
 
 Spring provides a convenient template class called `JmsTemplate`. `JmsTemplate` makes it very simple to send messages to a JMS message queue. In the `main` runner method, after starting things up, you create a `MessageCreator` and use it from `jmsTemplate` to send a message.
 
 Two beans that you don't see defined are `JmsTemplate` and `ActiveMQConnectionFactory`. These are created automatically by Spring Boot. In this case, the ActiveMQ broker runs embedded.
 
 By default, Spring Boot creates a `JmsTemplate` configured to http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#jms-destinations[transmit to queues] by having **pubSubDomain** set to false. The `SimpleMessageListenerContainer` is also configured the same.
-To override, set `spring.jms.isPubSubDomain=true` via Boot's property settings (either inside `application.propertes` or by environment variable). Then make sure the receiving container
+To override, set `spring.jms.isPubSubDomain=true` via Boot's property settings (either inside `application.properties` or by environment variable). Then make sure the receiving container
 has the same setting.
-
-http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#jms-destinations
 
 NOTE: Spring's `JmsTemplate` can receive messages directly through its `receive` method, but that only works synchronously, meaning it will block. That's why Spring recommends that you use a listener container such as `SimpleMessageListenerContainer` with a cache-based connection factory, so you can consume messages asynchronously and with maximum connection efficiency.
 
