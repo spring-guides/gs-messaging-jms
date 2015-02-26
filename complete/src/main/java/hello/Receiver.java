@@ -21,7 +21,7 @@ public class Receiver {
      * When you receive a message, print it out, then shut down the application.
      * Finally, clean up any ActiveMQ server stuff.
      */
-    @JmsListener(containerFactory = "myJmsContainerFactory", destination = "mailbox-destination")
+    @JmsListener(destination = "mailbox-destination", containerFactory = "myJmsContainerFactory")
     public void receiveMessage(String message) {
         System.out.println("Received <" + message + ">");
         context.close();
