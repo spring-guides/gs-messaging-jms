@@ -31,7 +31,7 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 
 [[initial]]
 == Create a message receiver
-Spring provides the means to publish messages to any POJO.
+Spring provides the means to publish messages to any link:/understanding/POJO[POJO].
 
 `src/main/java/hello/Receiver.java`
 [source,java]
