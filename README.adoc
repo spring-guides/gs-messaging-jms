@@ -31,14 +31,6 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 
 [[initial]]
 
-== Define a domain object
-
-`src/main/java/hello/Email.java`
-[source,java]
-----
-include::complete/src/main/java/hello/Email.java[]
-----
-
 == Create a message receiver
 
 Spring provides the means to publish messages to any link:/understanding/POJO[POJO].
