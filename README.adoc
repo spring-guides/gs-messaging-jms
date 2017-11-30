@@ -2,7 +2,7 @@
 tags: [messaging, jms]
 projects: [spring-framework]
 ---
-:spring_boot_version: 1.5.8.RELEASE
+:spring_boot_version: 1.5.9.RELEASE
 :toc:
 :icons: font
 :source-highlighter: prettify
