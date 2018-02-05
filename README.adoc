@@ -57,7 +57,7 @@ include::complete/src/main/java/hello/Receiver.java[]
 
 The `JmsListener` annotation defines the name of the `Destination` that this method should listen to and the reference to the `JmsListenerContainerFactory` to use to create the underlying message listener container. Strictly speaking that last attribute is not necessary unless you need to customize the way the container is built as Spring Boot registers a default factory if necessary.
 
-The http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#jms-annotated[reference documentation] covers this in more detail.
+The https://docs.spring.io/spring/docs/current/spring-framework-reference/integration.html#jms-annotated-method-signature[reference documentation] covers this in more detail.
 
 == Send and receive JMS messages with Spring
 Next, wire up a sender and a receiver.
