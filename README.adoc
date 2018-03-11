@@ -80,7 +80,7 @@ The default `MessageConverter` is able to convert only basic types (such as `Str
 
 Two beans that you don't see defined are `JmsTemplate` and `ConnectionFactory`. These are created automatically by Spring Boot. In this case, the ActiveMQ broker runs embedded.
 
-By default, Spring Boot creates a `JmsTemplate` configured to http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#jms-destinations[transmit to queues] by having **pubSubDomain** set to false. The `JmsMessageListenerContainer` is also configured the same.
+By default, Spring Boot creates a `JmsTemplate` configured to https://docs.spring.io/spring/docs/current/spring-framework-reference/integration.html#jms-destinations[transmit to queues] by having **pubSubDomain** set to false. The `JmsMessageListenerContainer` is also configured the same.
 To override, set `spring.jms.isPubSubDomain=true` via Boot's property settings (either inside `application.properties` or by environment variable). Then make sure the receiving container
 has the same setting.
 
