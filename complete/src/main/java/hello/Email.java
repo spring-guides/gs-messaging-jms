@@ -1,6 +1,7 @@
 package hello;
+import java.io.Serializable;
 
-public class Email {
+public class Email implements Serializable{
 
     private String to;
     private String body;

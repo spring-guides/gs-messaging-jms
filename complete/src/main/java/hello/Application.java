@@ -2,6 +2,8 @@
 package hello;
 
 import javax.jms.ConnectionFactory;
+import javax.jms.ObjectMessage;
+import javax.jms.*;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,6 +17,9 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
+
+import org.springframework.jms.support.converter.SimpleMessageConverter;
+import org.springframework.jms.core.MessageCreator;
 
 @SpringBootApplication
 @EnableJms
@@ -41,8 +46,15 @@ public class Application {
     public static void main(String[] args) {
         // Launch the application
         ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
-
         JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
+        SimpleMessageConverter sC = new SimpleMessageConverter();
+
+        jmsTemplate.send("mailbox", new MessageCreator() {
+            public Message createMessage(Session session) throws JMSException {
+                Email eM = new Email("test","hello");
+                return session.createObjectMessage(eM);
+            }
+        });
 
         // Send a message with a POJO - the template reuse the message converter
         System.out.println("Sending an email message.");
