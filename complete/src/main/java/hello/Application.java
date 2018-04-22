@@ -4,6 +4,13 @@ package hello;
 import javax.jms.ConnectionFactory;
 import javax.jms.ObjectMessage;
 import javax.jms.*;
+import javax.jms.JMSException;
+import javax.jms.Message;
+
+import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.broker.BrokerService;
+import org.springframework.jms.annotation.JmsListener;
+import org.springframework.jms.listener.*;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -42,12 +49,41 @@ public class Application {
         converter.setTypeIdPropertyName("_type");
         return converter;
     }
+/*
+    @Bean
+    public ConnectionFactory connectionFactory() {
+        ConnectionFactory connectionFactory =
+                new ActiveMQConnectionFactory("tcp://localhost:61616");
+        return connectionFactory;
+    }
+
+    @Bean
+    public MessageListenerContainer listenerContainer() {
+        DefaultMessageListenerContainer container = new DefaultMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory());
+        container.setDestinationName("mailbox");
+        container.setMessageListener(new MyReceiver());
+        return container;
+    }
+*/
+
+    @Bean
+    public BrokerService broker() throws Exception {
+        final BrokerService broker = new BrokerService();
+        broker.addConnector("tcp://localhost:61616");
+        broker.addConnector("vm://localhost");
+        broker.setPersistent(false);
+        return broker;
+    }
 
     public static void main(String[] args) {
         // Launch the application
         ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
         JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
-        SimpleMessageConverter sC = new SimpleMessageConverter();
+
+        System.out.println("Sending an email message.");
+
+        //jmsTemplate.convertAndSend("mailbox", "hallotestest");
 
         jmsTemplate.send("mailbox", new MessageCreator() {
             public Message createMessage(Session session) throws JMSException {
@@ -56,8 +92,7 @@ public class Application {
             }
         });
 
-        // Send a message with a POJO - the template reuse the message converter
-        System.out.println("Sending an email message.");
+        // Send a message with a POkJO - the template reuse the message converter
         jmsTemplate.convertAndSend("mailbox", new Email("info@example.com", "Hello"));
     }
 
