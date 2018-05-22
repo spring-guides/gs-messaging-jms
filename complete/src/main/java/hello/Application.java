@@ -3,6 +3,8 @@ package hello;
 
 import javax.jms.ConnectionFactory;
 
+import org.apache.activemq.broker.BrokerService;
+import org.apache.activemq.spring.ActiveMQConnectionFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
@@ -20,6 +22,23 @@ import org.springframework.jms.support.converter.MessageType;
 @EnableJms
 public class Application {
 
+	@Bean
+	public BrokerService brokerService() throws Exception {
+		// Create inMemory activeMq broker
+		BrokerService broker = new BrokerService();
+		broker.addConnector("tcp://localhost:61616");
+		broker.start();
+		return broker;
+	}
+	
+	@Bean
+	public ConnectionFactory connectionFactory() {
+		// Spring boot is not create connectionFactory automatically
+	    ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
+	    connectionFactory.setBrokerURL("tcp://localhost:61616");
+	    return (ConnectionFactory) connectionFactory;
+	}
+	
     @Bean
     public JmsListenerContainerFactory<?> myFactory(ConnectionFactory connectionFactory,
                                                     DefaultJmsListenerContainerFactoryConfigurer configurer) {
@@ -47,6 +66,8 @@ public class Application {
         // Send a message with a POJO - the template reuse the message converter
         System.out.println("Sending an email message.");
         jmsTemplate.convertAndSend("mailbox", new Email("info@example.com", "Hello"));
+        // Stop application
+        context.close();
     }
 
 }
