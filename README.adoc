@@ -34,7 +34,7 @@ Spring provides the means to publish messages to any link:/understanding/POJO[PO
 In this guide, you will look at how to send a message out over a JMS message broker. To start things off, let's create a very simply POJO that embodies the details of an email message. Pay note, we aren't sending an email message. We're simply sending the details from one place to another about WHAT to send in a message.
 
 `src/main/java/hello/Email.java`
-[source,java]
+[source,java,tabsize=2]
 ----
 include::complete/src/main/java/hello/Email.java[]
 ----
@@ -44,7 +44,7 @@ This POJO is quite simple, containing two fields, *to* and *body*, along with th
 From here, you can define a message receiver:
 
 `src/main/java/hello/Receiver.java`
-[source,java]
+[source,java,tabsize=2]
 ----
 include::complete/src/main/java/hello/Receiver.java[]
 ----
@@ -59,7 +59,7 @@ The https://docs.spring.io/spring/docs/current/spring-framework-reference/integr
 Next, wire up a sender and a receiver.
 
 `src/main/java/hello/Application.java`
-[source,java]
+[source,java,tabsize=2]
 ----
 include::complete/src/main/java/hello/Application.java[]
 ----
