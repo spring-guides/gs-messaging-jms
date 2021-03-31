@@ -1,4 +1,4 @@
-:spring_boot_version: 2.2.1.RELEASE
+:spring_boot_version: 2.4.4
 :toc:
 :icons: font
 :source-highlighter: prettify
@@ -6,11 +6,11 @@
 
 This guide walks you through the process of publishing and subscribing to messages using a JMS broker.
 
-== What you'll build
+== What You Will build
 
-You'll build an application that uses Spring's `JmsTemplate` to post a single message and subscribes to it with a `@JmsListener` annotated method of a managed bean.
+You will build an application that uses Spring's `JmsTemplate` to post a single message and subscribes to it with a `@JmsListener` annotated method of a managed bean.
 
-== What you'll need
+== What You need
 
 :java_version: 1.8
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/prereq_editor_jdk_buildtools.adoc[]
@@ -18,40 +18,73 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/how_to_complete_this_guide.adoc[]
 
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/hide-show-gradle.adoc[]
-
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/hide-show-maven.adoc[]
-
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/hide-show-sts.adoc[]
-
-
 [[initial]]
+== Starting with Spring Initializr
 
-== Create a message receiver
+If you use Maven, visit the https://start.spring.io/#!type=maven-project&language=java&platformVersion=2.4.4.RELEASE&packaging=jar&jvmVersion=1.8&groupId=com.example&artifactId=gs-messaging-jms&name=gs-messaging-jms&description=Demo%20project%20for%20Spring%20Boot&packageName=com.example.gs-messaging-jms&dependencies=activemq[Spring Initializr] to generate a new project with the required dependency (Spring for RabbitMQ).
 
-Spring provides the means to publish messages to any link:/understanding/POJO[POJO].
+The following listing shows the `pom.xml` file that is created when you choose Maven:
 
-In this guide, you will look at how to send a message out over a JMS message broker. To start things off, let's create a very simply POJO that embodies the details of an email message. Pay note, we aren't sending an email message. We're simply sending the details from one place to another about WHAT to send in a message.
+====
+[src,xml]
+----
+include::complete/pom.xml[]
+----
+====
+
+If you use Gradle, visit the https://start.spring.io/#!type=gradle-project&language=java&platformVersion=2.4.4.RELEASE&packaging=jar&jvmVersion=1.8&groupId=com.example&artifactId=gs-messaging-jms&name=gs-messaging-jms&description=Demo%20project%20for%20Spring%20Boot&packageName=com.example.gs-messaging-jms&dependencies=activemq[Spring Initializr] to generate a new project with the required dependency (Spring for RabbitMQ).
+
+The following listing shows the `build.gradle` file that is created when you choose Gradle:
+
+====
+[src,java]
+----
+include::complete/build.gradle[]
+----
+====
+
+=== Manual Initialization (optional)
+
+If you want to initialize the project manually rather than use the links shown earlier, follow the steps given below:
+
+. Navigate to https://start.spring.io.
+This service pulls in all the dependencies you need for an application and does most of the setup for you.
+. Choose either Gradle or Maven and the language you want to use. This guide assumes that you chose Java.
+. Click *Dependencies* and select *Spring for RabbitMQ*.
+. Click *Generate*.
+. Download the resulting ZIP file, which is an archive of a web application that is configured with your choices.
+
+NOTE: If your IDE has the Spring Initializr integration, you can complete this process from your IDE.
+
+== Create a Message Receiver
+
+Spring provides the means to publish messages to any POJO (Plain Old Java Object).
+
+This guide describes how to send a message out over a JMS message broker. To start things off, create a simple POJO that embodies the details of an email message. Note that we are not sending an email message. We send the details from one place to another about WHAT to send in a message.
 
 `src/main/java/hello/Email.java`
+====
 [source,java,tabsize=2]
 ----
 include::complete/src/main/java/hello/Email.java[]
 ----
+====
 
-This POJO is quite simple, containing two fields, *to* and *body*, along with the presumed set of getters and setters.
+This POJO is quite simple, containing two fields (*to* and *body*), along with the presumed set of getters and setters.
 
 From here, you can define a message receiver:
 
 `src/main/java/hello/Receiver.java`
+====
 [source,java,tabsize=2]
 ----
 include::complete/src/main/java/hello/Receiver.java[]
 ----
+====
 
-`Receiver` is also known as a **message driven POJO**. As you can see in the code above, there is no need to implement any particular interface or for the method to have any particular name. Besides, the method may have a https://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#jms-annotated-method-signature[very flexible signature]. Note in particular that this class has no import on the JMS API.
+`Receiver` is also known as a *message-driven POJO*. As the code shows, there is no need to implement any particular interface or for the method to have any particular name. Besides, the method may have a https://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#jms-annotated-method-signature[flexible signature]. Note, in particular, that this class has no import of the JMS API.
 
-The `JmsListener` annotation defines the name of the `Destination` that this method should listen to and the reference to the `JmsListenerContainerFactory` to use to create the underlying message listener container. Strictly speaking that last attribute is not necessary unless you need to customize the way the container is built as Spring Boot registers a default factory if necessary.
+The `JmsListener` annotation defines the name of the `Destination` that this method should listen to and the reference to the `JmsListenerContainerFactory` to use to create the underlying message listener container. Strictly speaking, that last attribute is not necessary unless you need to customize the way the container is built, as Spring Boot registers a default factory if necessary.
 
 The https://docs.spring.io/spring/docs/current/spring-framework-reference/integration.html#jms-annotated-method-signature[reference documentation] covers this in more detail.
 
@@ -59,28 +92,30 @@ The https://docs.spring.io/spring/docs/current/spring-framework-reference/integr
 Next, wire up a sender and a receiver.
 
 `src/main/java/hello/Application.java`
+====
 [source,java,tabsize=2]
 ----
 include::complete/src/main/java/hello/Application.java[]
 ----
+====
 
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/spring-boot-application.adoc[]
 
 `@EnableJms` triggers the discovery of methods annotated with `@JmsListener`, creating the message listener container under the covers.
 
-For clarity, we have also defined a `myFactory` bean that is referenced in the `JmsListener` annotation of the receiver. Because we use the `DefaultJmsListenerContainerFactoryConfigurer` infrastructure provided by Spring Boot, that `JmsMessageListenerContainer` will be identical to the one that boot creates by default.
+For clarity, we have also defined a `myFactory` bean that is referenced in the `JmsListener` annotation of the receiver. Because we use the `DefaultJmsListenerContainerFactoryConfigurer` infrastructure provided by Spring Boot, that `JmsMessageListenerContainer` is identical to the one that Boot creates by default.
 
-The default `MessageConverter` is able to convert only basic types (such as `String`, `Map`, `Serializable`) and our `Email` is not `Serializable` on purpose. We want to use Jackson and serialize the content to json in text format (i.e. as a `TextMessage`). Spring Boot will detect the presence of a `MessageConverter` and will associate it to both the default `JmsTemplate` and any `JmsListenerContainerFactory` created by `DefaultJmsListenerContainerFactoryConfigurer`.
+The default `MessageConverter` can convert only basic types (such as `String`, `Map`, `Serializable`), and our `Email` is not `Serializable` on purpose. We want to use Jackson and serialize the content to JSON in text format (that is, as a `TextMessage`). Spring Boot detects the presence of a `MessageConverter` and associates it to both the default `JmsTemplate` and any `JmsListenerContainerFactory` created by `DefaultJmsListenerContainerFactoryConfigurer`.
 
-`JmsTemplate` makes it very simple to send messages to a JMS destination. In the `main` runner method, after starting things up, you can just use `jmsTemplate` to send an `Email` POJO. Because our custom `MessageConverter` has been automatically associated to it, a json document will be generated in a `TextMessage` only.
+`JmsTemplate` makes it simple to send messages to a JMS destination. In the `main` runner method, after starting things up, you can use `jmsTemplate` to send an `Email` POJO. Because our custom `MessageConverter` has been automatically associated to it, a JSON document is generated in a `TextMessage` only.
 
-Two beans that you don't see defined are `JmsTemplate` and `ConnectionFactory`. These are created automatically by Spring Boot. In this case, the ActiveMQ broker runs embedded.
+Two beans that you do not see defined are `JmsTemplate` and `ConnectionFactory`. These are created automatically by Spring Boot. In this case, the ActiveMQ broker runs embedded.
 
-By default, Spring Boot creates a `JmsTemplate` configured to https://docs.spring.io/spring/docs/current/spring-framework-reference/integration.html#jms-destinations[transmit to queues] by having **pubSubDomain** set to false. The `JmsMessageListenerContainer` is also configured the same.
-To override, set `spring.jms.isPubSubDomain=true` via Boot's property settings (either inside `application.properties` or by environment variable). Then make sure the receiving container
+By default, Spring Boot creates a `JmsTemplate` configured to https://docs.spring.io/spring/docs/current/spring-framework-reference/integration.html#jms-destinations[transmit to queues] by having `pubSubDomain` set to `false`. The `JmsMessageListenerContainer` is also configured the same way.
+To override, set `spring.jms.isPubSubDomain=true` through Boot's property settings (either inside `application.properties` or by setting an environment variable). Then make sure the receiving container
 has the same setting.
 
-NOTE: Spring's `JmsTemplate` can receive messages directly through its `receive` method, but that only works synchronously, meaning it will block. That's why we recommend that you use a listener container such as `DefaultMessageListenerContainer` with a cache-based connection factory, so you can consume messages asynchronously and with maximum connection efficiency.
+NOTE: Spring's `JmsTemplate` can receive messages directly through its `receive` method, but that works only synchronously, meaning that it blocks. That is why we recommend that you use a listener container such as `DefaultMessageListenerContainer` with a cache-based connection factory, so you can consume messages asynchronously and with maximum connection efficiency.
 
 
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/build_an_executable_jar_subhead.adoc[]
@@ -95,7 +130,6 @@ Received <Email{to=info@example.com, body=Hello}>
 ....
 
 == Summary
-Congratulations! You've just developed a publisher and consumer of JMS-based messages.
+Congratulations! You have developed a publisher and consumer of JMS-based messages.
 
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/footer.adoc[]
-
