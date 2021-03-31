@@ -21,7 +21,7 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 [[initial]]
 == Starting with Spring Initializr
 
-If you use Maven, visit the https://start.spring.io/#!type=maven-project&language=java&platformVersion=2.4.4.RELEASE&packaging=jar&jvmVersion=1.8&groupId=com.example&artifactId=gs-messaging-jms&name=gs-messaging-jms&description=Demo%20project%20for%20Spring%20Boot&packageName=com.example.gs-messaging-jms&dependencies=activemq[Spring Initializr] to generate a new project with the required dependency (Spring for RabbitMQ).
+If you use Maven, visit the https://start.spring.io/#!type=maven-project&language=java&platformVersion=2.4.4.RELEASE&packaging=jar&jvmVersion=1.8&groupId=com.example&artifactId=gs-messaging-jms&name=gs-messaging-jms&description=Demo%20project%20for%20Spring%20Boot&packageName=com.example.gs-messaging-jms&dependencies=activemq[Spring Initializr] to generate a new project with the required dependency (Spring for Apache ActiveMQ 5).
 
 The following listing shows the `pom.xml` file that is created when you choose Maven:
 
@@ -32,7 +32,7 @@ include::complete/pom.xml[]
 ----
 ====
 
-If you use Gradle, visit the https://start.spring.io/#!type=gradle-project&language=java&platformVersion=2.4.4.RELEASE&packaging=jar&jvmVersion=1.8&groupId=com.example&artifactId=gs-messaging-jms&name=gs-messaging-jms&description=Demo%20project%20for%20Spring%20Boot&packageName=com.example.gs-messaging-jms&dependencies=activemq[Spring Initializr] to generate a new project with the required dependency (Spring for RabbitMQ).
+If you use Gradle, visit the https://start.spring.io/#!type=gradle-project&language=java&platformVersion=2.4.4.RELEASE&packaging=jar&jvmVersion=1.8&groupId=com.example&artifactId=gs-messaging-jms&name=gs-messaging-jms&description=Demo%20project%20for%20Spring%20Boot&packageName=com.example.gs-messaging-jms&dependencies=activemq[Spring Initializr] to generate a new project with the required dependency (Spring for Apache ActiveMQ 5).
 
 The following listing shows the `build.gradle` file that is created when you choose Gradle:
 
@@ -50,7 +50,7 @@ If you want to initialize the project manually rather than use the links shown e
 . Navigate to https://start.spring.io.
 This service pulls in all the dependencies you need for an application and does most of the setup for you.
 . Choose either Gradle or Maven and the language you want to use. This guide assumes that you chose Java.
-. Click *Dependencies* and select *Spring for RabbitMQ*.
+. Click *Dependencies* and select *Spring for Apache ActiveMQ 5*.
 . Click *Generate*.
 . Download the resulting ZIP file, which is an archive of a web application that is configured with your choices.
 
