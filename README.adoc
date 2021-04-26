@@ -13,9 +13,9 @@ You will build an application that uses Spring's `JmsTemplate` to post a single 
 == What You need
 
 :java_version: 1.8
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/prereq_editor_jdk_buildtools.adoc[]
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/prereq_editor_jdk_buildtools.adoc[]
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/how_to_complete_this_guide.adoc[]
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/how_to_complete_this_guide.adoc[]
 
 
 [[initial]]
@@ -99,7 +99,7 @@ include::complete/src/main/java/hello/Application.java[]
 ----
 ====
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/spring-boot-application.adoc[]
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/spring-boot-application.adoc[]
 
 `@EnableJms` triggers the discovery of methods annotated with `@JmsListener`, creating the message listener container under the covers.
 
@@ -118,9 +118,9 @@ has the same setting.
 NOTE: Spring's `JmsTemplate` can receive messages directly through its `receive` method, but that works only synchronously, meaning that it blocks. That is why we recommend that you use a listener container such as `DefaultMessageListenerContainer` with a cache-based connection factory, so you can consume messages asynchronously and with maximum connection efficiency.
 
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/build_an_executable_jar_subhead.adoc[]
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/build_an_executable_jar_subhead.adoc[]
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/build_an_executable_jar_with_both.adoc[]
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/build_an_executable_jar_with_both.adoc[]
 
 When it runs, buried amidst all the logging, you should see these messages:
 
@@ -132,4 +132,4 @@ Received <Email{to=info@example.com, body=Hello}>
 == Summary
 Congratulations! You have developed a publisher and consumer of JMS-based messages.
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/footer.adoc[]
+include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/footer.adoc[]
