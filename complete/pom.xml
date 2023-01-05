@@ -16,6 +16,16 @@
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.jboss.logmanager</groupId>
+				<artifactId>jboss-logmanager</artifactId>
+				<version>2.1.18.Final</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -26,6 +36,18 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<!-- Adding dependencies for jackson-databind -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.14.1</version>
+		</dependency>
+		<!-- Adding dependencies for embedded activeMQ -->
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>artemis-jakarta-server</artifactId>
+			<version>2.27.1</version>
 		</dependency>
 	</dependencies>
 
