@@ -26,7 +26,7 @@ public class Application {
 		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
 		// This provides all auto-configured defaults to this factory, including the message converter
 		configurer.configure(factory, connectionFactory);
-		// You could still override some of settings if necessary.
+		// You could still override some settings if necessary.
 		return factory;
 	}
 
