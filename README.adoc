@@ -12,7 +12,7 @@ You will build an application that uses Spring's `JmsTemplate` to post a single 
 
 == What You need
 
-:java_version: 1.8
+:java_version: 17
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/prereq_editor_jdk_buildtools.adoc[]
 
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/how_to_complete_this_guide.adoc[]
@@ -21,16 +21,16 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 [[initial]]
 == Starting with Spring Initializr
 
-You can use this https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.1.0&packaging=jar&jvmVersion=11&groupId=com.example&artifactId=messaging-jms&name=messaging-jms&description=Demo%20project%20for%20Spring%20Boot&packageName=com.example.messaging-jms&dependencies=activemq[pre-initialized project] and click Generate to download a ZIP file. This project is configured to fit the examples in this tutorial.
+You can use this https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.1.0&packaging=jar&groupId=com.example&artifactId=messaging-jms&dependencies=artemis[pre-initialized project] and click Generate to download a ZIP file. This project is configured to fit the examples in this tutorial.
 
 To manually initialize the project:
 
 . Navigate to https://start.spring.io.
 This service pulls in all the dependencies you need for an application and does most of the setup for you.
 . Choose either Gradle or Maven and the language you want to use. This guide assumes that you chose Java.
-. Click *Dependencies* and select *Spring for Apache ActiveMQ 5*.
+. Click *Dependencies* and select *Spring for Apache ActiveMQ Artemis*.
 . Click *Generate*.
-. Download the resulting ZIP file, which is an archive of a web application that is configured with your choices.
+. Download the resulting ZIP file, which is an archive of an application that is configured with your choices.
 
 NOTE: If your IDE has the Spring Initializr integration, you can complete this process from your IDE.
 
@@ -62,11 +62,11 @@ include::complete/src/main/java/hello/Receiver.java[]
 ----
 ====
 
-`Receiver` is also known as a *message-driven POJO*. As the code shows, there is no need to implement any particular interface or for the method to have any particular name. Besides, the method may have a https://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#jms-annotated-method-signature[flexible signature]. Note, in particular, that this class has no import of the JMS API.
+`Receiver` is also known as a *message-driven POJO*. As the code shows, there is no need to implement any particular interface or for the method to have any particular name. Besides, the method may have a https://docs.spring.io/spring-framework/reference/integration/jms/annotated.html#jms-annotated-method-signature[flexible signature]. Note, in particular, that this class has no import of the JMS API.
 
 The `JmsListener` annotation defines the name of the `Destination` that this method should listen to and the reference to the `JmsListenerContainerFactory` to use to create the underlying message listener container. Strictly speaking, that last attribute is not necessary unless you need to customize the way the container is built, as Spring Boot registers a default factory if necessary.
 
-The https://docs.spring.io/spring/docs/current/spring-framework-reference/integration.html#jms-annotated-method-signature[reference documentation] covers this in more detail.
+The https://docs.spring.io/spring-framework/reference/integration/jms/annotated.html#jms-annotated-support[reference documentation] covers this in more detail.
 
 == Send and receive JMS messages with Spring
 Next, wire up a sender and a receiver.
@@ -83,16 +83,26 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 
 `@EnableJms` triggers the discovery of methods annotated with `@JmsListener`, creating the message listener container under the covers.
 
-For clarity, we have also defined a `myFactory` bean that is referenced in the `JmsListener` annotation of the receiver. Because we use the `DefaultJmsListenerContainerFactoryConfigurer` infrastructure provided by Spring Boot, that `JmsMessageListenerContainer` is identical to the one that Boot creates by default.
+For clarity, we have also defined a `myFactory` bean that is referenced in the `JmsListener` annotation of the receiver. Because we use the `DefaultJmsListenerContainerFactoryConfigurer` infrastructure provided by Spring Boot, that `JmsMessageListenerContainer` is identical to the one that Spring Boot creates by default.
 
-The default `MessageConverter` can convert only basic types (such as `String`, `Map`, `Serializable`), and our `Email` is not `Serializable` on purpose. We want to use Jackson and serialize the content to JSON in text format (that is, as a `TextMessage`). Spring Boot detects the presence of a `MessageConverter` and associates it to both the default `JmsTemplate` and any `JmsListenerContainerFactory` created by `DefaultJmsListenerContainerFactoryConfigurer`.
+The default `MessageConverter` can convert only basic types (such as `String`, `Map`, `Serializable`), and our `Email` is not `Serializable` on purpose. We want to use Jackson and serialize the content to JSON in text format (that is, as a `TextMessage`). Spring Boot detects the presence of a `MessageConverter` and associates it to both the default `JmsTemplate` and any `JmsListenerContainerFactory` created by `DefaultJmsListenerContainerFactoryConfigurer`. Our JSON converter needs the `spring-boot-starter-json` dependency.
 
 `JmsTemplate` makes it simple to send messages to a JMS destination. In the `main` runner method, after starting things up, you can use `jmsTemplate` to send an `Email` POJO. Because our custom `MessageConverter` has been automatically associated to it, a JSON document is generated in a `TextMessage` only.
 
-Two beans that you do not see defined are `JmsTemplate` and `ConnectionFactory`. These are created automatically by Spring Boot. In this case, the ActiveMQ broker runs embedded.
+Two beans that you do not see defined are `JmsTemplate` and `ConnectionFactory`. These are created automatically by Spring Boot.
 
-By default, Spring Boot creates a `JmsTemplate` configured to https://docs.spring.io/spring/docs/current/spring-framework-reference/integration.html#jms-destinations[transmit to queues] by having `pubSubDomain` set to `false`. The `JmsMessageListenerContainer` is also configured the same way.
-To override, set `spring.jms.isPubSubDomain=true` through Boot's property settings (either inside `application.properties` or by setting an environment variable). Then make sure the receiving container
+By default, Spring Boot tries to connect to an artemis broker running on the local machine.
+It is also possible to embed the broker by adding the following configuration property:
+
+[source,properties]
+----
+spring.artemis.mode=embedded
+----
+
+You also need to add a dependency to `org.apache.activemq:artemis-jakarta-server`.
+
+By default, Spring Boot creates a `JmsTemplate` configured to https://docs.spring.io/spring-framework/reference/integration/jms/sending.html[transmit to queues] by having `pubSubDomain` set to `false`. The `JmsMessageListenerContainer` is also configured the same way.
+To override, set `spring.jms.is-pub-sub-domain=true` through Spring Boot's property settings (either inside `application.properties` or by setting an environment variable). Then make sure the receiving container
 has the same setting.
 
 NOTE: Spring's `JmsTemplate` can receive messages directly through its `receive` method, but that works only synchronously, meaning that it blocks. That is why we recommend that you use a listener container such as `DefaultMessageListenerContainer` with a cache-based connection factory, so you can consume messages asynchronously and with maximum connection efficiency.
