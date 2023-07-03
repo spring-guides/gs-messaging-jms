@@ -81,7 +81,7 @@ include::complete/src/main/java/hello/Application.java[]
 
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/spring-boot-application.adoc[]
 
-`@EnableJms` triggers the discovery of methods annotated with `@JmsListener`, creating the message listener container under the covers.
+`@EnableJms` triggers the discovery of methods annotated with `@JmsListener`, creating the message listener container under the covers. In a SpringBoot based application, this annotation is optional since SpringBoot will discover the `@JmsListener` annotations even without it, i.e. just based on the presence of the necessary bits for the JMS infrastructure.
 
 For clarity, we have also defined a `myFactory` bean that is referenced in the `JmsListener` annotation of the receiver. Because we use the `DefaultJmsListenerContainerFactoryConfigurer` infrastructure provided by Spring Boot, that `JmsMessageListenerContainer` is identical to the one that Spring Boot creates by default.
 
