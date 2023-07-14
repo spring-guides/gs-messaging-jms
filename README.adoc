@@ -18,7 +18,7 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/main/how_to_complete_this_guide.adoc[]
 
 
-[[initial]]
+[[scratch]]
 == Starting with Spring Initializr
 
 You can use this https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.1.0&packaging=jar&groupId=com.example&artifactId=messaging-jms&dependencies=artemis[pre-initialized project] and click Generate to download a ZIP file. This project is configured to fit the examples in this tutorial.
