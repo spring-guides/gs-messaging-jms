@@ -102,7 +102,7 @@ spring.artemis.mode=embedded
 You also need to add a dependency to `org.apache.activemq:artemis-jakarta-server`.
 
 By default, Spring Boot creates a `JmsTemplate` configured to https://docs.spring.io/spring-framework/reference/integration/jms/sending.html[transmit to queues] by having `pubSubDomain` set to `false`. The `JmsMessageListenerContainer` is also configured the same way.
-To override, set `spring.jms.is-pub-sub-domain=true` through Spring Boot's property settings (either inside `application.properties` or by setting an environment variable). Then make sure the receiving container
+To override, set `spring.jms.pub-sub-domain=true` through Spring Boot's property settings (either inside `application.properties` or by setting an environment variable). Then make sure the receiving container
 has the same setting.
 
 NOTE: Spring's `JmsTemplate` can receive messages directly through its `receive` method, but that works only synchronously, meaning that it blocks. That is why we recommend that you use a listener container such as `DefaultMessageListenerContainer` with a cache-based connection factory, so you can consume messages asynchronously and with maximum connection efficiency.
